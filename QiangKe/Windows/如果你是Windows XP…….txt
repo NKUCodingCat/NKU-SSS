@@ -1,0 +1,2 @@
+﻿请自行双击 dist目录下QiangKe_NKU.exe文件
+顺便吐槽VS2012必须装Update才能支持XP，但是我没流量了╮(￣▽￣")╭ 不装了
