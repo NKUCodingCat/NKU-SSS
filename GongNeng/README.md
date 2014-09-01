@@ -14,3 +14,7 @@ MacOSX：OS X用户的使用说明。
 作者
 =======
 @CodingCat   github.com/NKUCodingCat/
+
+Tips：
+=======
+某神奇的测评每年都不一样，下载使用以前注意一下版本号，目前是2014版……
