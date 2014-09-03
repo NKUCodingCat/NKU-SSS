@@ -9,7 +9,7 @@ SRC：程序源代码。
 
 Windows：Windows的可执行文件。
 
-MacOSX：OS X用户的使用说明。
+MacOSX：OS X用户的使♂用♀技♂巧。
 
 作者
 =======
