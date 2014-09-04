@@ -4,6 +4,8 @@ NKU-SSS
 
 NKU Survival Software Suit
 
+我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip)
+
 Note:
 =======
 请仔细阅读以下文本
@@ -17,7 +19,7 @@ GongNeng：功能测评套装
 
 How to use
 ========
-猛戳“Download ZIP”，你将会的到一个压缩文件
+猛戳[Download ZIP](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip)，你将会的到一个压缩文件
 
 打开压缩文件找到你要的东西
 
