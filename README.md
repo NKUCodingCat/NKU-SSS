@@ -4,7 +4,7 @@ NKU-SSS
 
 NKU Survival Software Suit
 
-我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) ←————戳一下
+我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) ←— 戳一下
 
 Note:
 =======
