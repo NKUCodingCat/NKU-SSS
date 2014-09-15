@@ -33,5 +33,5 @@ How to use
 
 【上面这句话…………大概就是……谁要是能维护就fork一个吧这样子大家就能愉快地用下去不怕学校更新网站（marked by CodingCat）】
 
-To be continued…
+To be continued…。
 
