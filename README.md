@@ -6,16 +6,15 @@ NKU Survival Software Suit
 
 我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) 和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
-Note:
-=======
-请仔细阅读以下文本
+开发/维护 进度
+=========
+2014.9.16更新由于教务处更换服务器导致的课号查询失效
 
 文件说明
 =======
 NK-CourseGrabber：一键刷课
 
 GongNeng：功能测评套装
-
 
 How to use
 ========
