@@ -2,7 +2,7 @@ NKU-SSS
 =======
 南开生存之软件套装
 
-NKU Survival Software Suit
+NKU Survival Software Suit (也许是suite？不要在意具体怎么拼啦~)
 
 我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) 和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
