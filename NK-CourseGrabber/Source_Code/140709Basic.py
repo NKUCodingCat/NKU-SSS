@@ -674,21 +674,21 @@ class Application(Application_ui):
 		if c_code == "":
 			return ""
 		h={
-			'Host': '222.30.32.3',
+			'Host': 'jwc.nankai.edu.cn',
 			'Connection': 'keep-alive',
 			'Cache-Control': 'max-age=0',
 			'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-			'Origin': 'http://222.30.32.3',
+			'Origin': 'http://jwc.nankai.edu.cn',
 			'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36',
 			'Content-Type': 'application/x-www-form-urlencoded',
-			'Referer': 'http://222.30.32.3/apps/xksc/index.asp',
+			'Referer': 'http://jwc.nankai.edu.cn/apps/xksc/index.asp',
 			'Accept-Encoding': 'gzip,deflate,sdch',
 			'Accept-Language': 'zh-CN,zh;q=0.8'
 		}
 		try:
-			conct=httplib.HTTPConnection('222.30.32.3',timeout=10)
+			conct=httplib.HTTPConnection('jwc.nankai.edu.cn',timeout=10)
 			formdata='strsearch='+c_code+'&radio=1&Submit=%CC%E1%BD%BB'
-			conct.request('POST','http://222.30.32.3/apps/xksc/search.asp',formdata,h)
+			conct.request('POST','http://jwc.nankai.edu.cn/apps/xksc/search.asp',formdata,h)
 			contnt=conct.getresponse().read().decode("gb2312")
 			conct.close()
 		except:
@@ -715,11 +715,11 @@ if __name__ == "__main__":
 	try:
 		f=open("ValidateCode.jpg","r")
 	except:
-		f=open("ValidateCode","r")
+		#f=open("ValidateCode","r")
 		ff=open("ValidateCode.jpg","w+b")
-		d=f.read()
+		#d=f.read()
 		ff.write(d)
-		f.close()
+		#f.close()
 		ff.close()
 	top = Tk()
 	Application(top).mainloop()
