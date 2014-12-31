@@ -2,7 +2,7 @@ NKU-SSS
 =======
 南开生存之软件套装
 
-NKU Survival Software Suit (也许是suite？不要在意具体怎么拼啦~)
+NKU Survival Software Suite (也许是suite？不要在意具体怎么拼啦~) (没错就是suite=。=)
 
 我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) 和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
@@ -31,6 +31,7 @@ How to use
 希望每一个有能力的人都加入到我们的队伍中来，共同为南开创造一个开放的软件创作氛围。
 
 【上面这句话…………大概就是……谁要是能维护就fork一个吧这样子大家就能愉快地用下去不怕学校更新网站（marked by CodingCat）】
+【嗯。。大概就是这个意思。嗯=，=】
 
-To be continued…。
+To be continued…。~
 

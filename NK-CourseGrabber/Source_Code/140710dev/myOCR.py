@@ -145,7 +145,7 @@ def getNumber(im):
 	return NumberList
 			
 def myOCR_start(im):
-	characteristic_file=open("vcodeData",'r')
+	characteristic_file=open("vcodeData2",'r')
 	characteristic_value=[''for i in range(10)]
 	for i in range(10):
 		characteristic_value[i]=characteristic_file.readline()
