@@ -8,7 +8,7 @@ NK-CourseGrabber
 
 Source_Code/：源代码&用到的数据和图标。
 
-Source_Code/140710dev/：这是一个增加了某项功能的开发者版本。
+Source_Code/Dev/：这是一个增加了某项功能的开发者版本。
 
 MacOSX/：为MaxOSX下的可执行文件。在OS X 9&10测试通过。
 
@@ -21,5 +21,5 @@ LICENSE
 
 作者
 ================
-@CodingCat  github.com/NKUCodingCat/
-@Neon4o4    github.com/Neon4o4
+[@CodingCat](https://github.com/NKUCodingCat/)
+[@Neon4o4](https://github.com/Neon4o4)
