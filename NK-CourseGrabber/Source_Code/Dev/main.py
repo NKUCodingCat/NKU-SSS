@@ -553,6 +553,7 @@ class Application(Application_ui):
 			return course_list
 		
 	def PostData(self, post_course_list, count):
+		global PROCESSING
 		self.Log.delete(20.0,END)
 		self.Log2.delete(20.0,END)
 		course=[]
@@ -579,14 +580,18 @@ class Application(Application_ui):
 			res=conn.getresponse()
 		except:
 			self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
-			if not self.AutoLogin():
-				return post_course_list
+			while not self.AutoLogin():
+				pass
+			PROCESSING = True
+			return post_course_list
 		#太久不管的话cookie会失效
 		if res.status == 302:
 			self.Log.insert(1.0,"登录超时，请重新登录\n")
 			Login_S = False
-			if not self.AutoLogin():
-				return post_course_list
+			while not self.AutoLogin():
+				pass
+			PROCESSING = True
+			return post_course_list
 		response=res.read()
 		content=response.decode("gbk").encode('utf-8')
 		#----------------------------------------------------------
