@@ -587,7 +587,21 @@ class Application(Application_ui):
 			Login_S = False
 			if not self.AutoLogin():
 				return post_course_list
-		response=res.read()
+		CC = 0
+		Flag = False
+		while CC<3:
+			try:
+				CC+=1
+				response=res.read()
+				Flag = True
+				break
+			except:
+				continue
+		if not Flag:
+			self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
+			if not self.AutoLogin():
+				return post_course_list
+			return post_course_list
 		content=response.decode("gbk").encode('utf-8')
 		#----------------------------------------------------------
 		#----------------------抓取-------------

@@ -1,14 +1,16 @@
-NKU-SSS
+﻿NKU-SSS
 =======
 南开生存之软件套装
 
 NKU Survival Software Suite (也许是suite？不要在意具体怎么拼啦~) (没错就是suite=。=)
 
-我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) 和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
+我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) / [一号加速镜像(US)](http://vps1.nkucodingcat.com/test/cdn/) 和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
 开发/维护 进度
 =========
-2014.9.16更新由于教务处更换服务器导致的课号查询失效
+2015.1.14 加速镜像（专治各种下不下来）上线
+2015.1.3   正在修理bug
+2014.9.16 更新由于教务处更换服务器导致的课号查询失效
 
 文件说明
 =======

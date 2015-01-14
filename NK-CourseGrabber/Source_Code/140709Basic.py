@@ -526,19 +526,22 @@ class Application(Application_ui):
 				postdata += ("&xkxh"+str(i+1)+"=")
 		postdata += "&de=%25&courseindex="
 		try:
-			conn=httplib.HTTPConnection("222.30.32.10",timeout=10)
-			conn.request("POST",UpUrl,postdata,headers)
-			res=conn.getresponse()
+			try:
+				conn=httplib.HTTPConnection("222.30.32.10",timeout=5)
+				conn.request("POST",UpUrl,postdata,headers)
+				res=conn.getresponse()
+			except:
+				self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
+				return post_course_list
+			#太久不管的话cookie会失效
+			if res.status == 302:
+				self.Log.insert(1.0,"登录超时，请重新登录\n")
+				Login_S = False
+				return post_course_list
+			response=res.read()
+			content=response.decode("gbk").encode('utf-8')
 		except:
-			self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
 			return post_course_list
-		#太久不管的话cookie会失效
-		if res.status == 302:
-			self.Log.insert(1.0,"登录超时，请重新登录\n")
-			Login_S = False
-			return post_course_list
-		response=res.read()
-		content=response.decode("gbk").encode('utf-8')
 		#----------------------------------------------------------
 		#----------------------抓取-------------
 		reg = re.compile(u'"BlueBigText">[\s\S]*</font>') 
