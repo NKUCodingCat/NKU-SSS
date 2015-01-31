@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-Ver = 'Ver 2.0 Dev (20140708 RC 1.0 Beta)'
+Ver = 'Ver 2.1.1 Dev (20150105)'
 
 import select
 import httplib
@@ -553,6 +553,7 @@ class Application(Application_ui):
 			return course_list
 		
 	def PostData(self, post_course_list, count):
+		global PROCESSING
 		self.Log.delete(20.0,END)
 		self.Log2.delete(20.0,END)
 		course=[]
@@ -579,29 +580,19 @@ class Application(Application_ui):
 			res=conn.getresponse()
 		except:
 			self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
-			if not self.AutoLogin():
-				return post_course_list
+			while not self.AutoLogin():
+				pass
+			PROCESSING = True
+			return post_course_list
 		#太久不管的话cookie会失效
 		if res.status == 302:
 			self.Log.insert(1.0,"登录超时，请重新登录\n")
 			Login_S = False
-			if not self.AutoLogin():
-				return post_course_list
-		CC = 0
-		Flag = False
-		while CC<3:
-			try:
-				CC+=1
-				response=res.read()
-				Flag = True
-				break
-			except:
-				continue
-		if not Flag:
-			self.Log.insert(1.0,"网络连接错误。请检查网络连接！\n")
-			if not self.AutoLogin():
-				return post_course_list
+			while not self.AutoLogin():
+				pass
+			PROCESSING = True
 			return post_course_list
+		response=res.read()
 		content=response.decode("gbk").encode('utf-8')
 		#----------------------------------------------------------
 		#----------------------抓取-------------
@@ -627,7 +618,8 @@ class Application(Application_ui):
 		#----------------------------------------
 		fail_course=[]
 		for course_code in post_course_list:
-			if re.search(course_code,Data) != None:
+			#if re.search(course_code,Data) != None:
+			if not self.CheckSelected(course_code):
 				fail_course.append(course_code)
 			else:
 				self.Log2.insert(1.0,(course_code+' '+self.GetName(course_code)+'\n'))
@@ -642,9 +634,9 @@ class Application(Application_ui):
 		#-----------------------------------------------------------
 		if PROCESSING==False:
 			return fail_course
-		self.Log.insert(1.0,'-----------------休眠5秒--------------------\n')
+		self.Log.insert(1.0,'-----------------休眠3秒--------------------\n')
 		#-------------保持刷新防止假死------------
-		for j in range (0,20):
+		for j in range (0,12):
 			self.Log.update()
 			time.sleep(0.2492)
 			self.Log.update()
@@ -773,6 +765,18 @@ class Application(Application_ui):
 				illegal_course.append(check_list[i])
 				illegal_info.append(name)
 		return (illegal_course,illegal_info)
+	def CheckSelected(self, course_code):
+		name = self.GetName(course_code)
+		try:
+			conn = httplib.HTTPConnection('222.30.32.10',timeout=20)
+			conn.request('GET','http://222.30.32.10/xsxk/selectedAction.do?operation=kebiao','',self.headers)
+			content = conn.getresponse().read()#.decode("gb2312")
+			conn.close()
+		except:
+			return False
+		if content.find(name) != -1:
+			return True
+		return False
 
 
 if __name__ == "__main__":

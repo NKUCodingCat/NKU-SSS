@@ -524,7 +524,7 @@ class Application(Application_ui):
 				postdata += ("&xkxh"+str(i+1)+"="+course[i])
 			else:
 				postdata += ("&xkxh"+str(i+1)+"=")
-		postdata += "&de=%25&courseindex="
+		postdata += "&departIncode=%25&courseindex="
 		try:
 			try:
 				conn=httplib.HTTPConnection("222.30.32.10",timeout=5)
@@ -566,7 +566,7 @@ class Application(Application_ui):
 		#----------------------------------------
 		fail_course=[]
 		for course_code in post_course_list:
-			if re.search(course_code,Data) != None:
+			if not self.CheckSelected(course_code):
 				fail_course.append(course_code)
 			else:
 				self.Log2.insert(1.0,(course_code+' '+self.GetName(course_code)+'\n'))
@@ -713,6 +713,18 @@ class Application(Application_ui):
 				illegal_info.append(name)
 		return (illegal_course,illegal_info)
 
+	def CheckSelected(self, course_code):
+		name = self.GetName(course_code)
+		try:
+			conn = httplib.HTTPConnection('222.30.32.10',timeout=20)
+			conn.request('GET','http://222.30.32.10/xsxk/selectedAction.do?operation=kebiao','',self.headers)
+			content = conn.getresponse().read()#.decode("gb2312")
+			conn.close()
+		except:
+			return False
+		if content.find(name) != -1:
+			return True
+		return False
 
 if __name__ == "__main__":
 	try:
