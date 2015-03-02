@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-Ver = 'Ver 2.1.1 Dev (20150105)'
+Ver = 'Ver 2.1.1 Dev (20150302)'
 
 import select
 import httplib
@@ -114,7 +114,7 @@ class Application_ui(Frame):
 	#这个类仅实现界面生成功能，具体事件处理代码在子类Application中。
 	def __init__(self, master=None):
 		Frame.__init__(self, master)
-		self.master.title('一键刷课 for NKU V2.1 Beta')
+		self.master.title('一键刷课 for NKU V2.1.1 Dev')
 		self.master.geometry('640x480')
 		self.createWidgets()
 
@@ -765,6 +765,7 @@ class Application(Application_ui):
 				illegal_course.append(check_list[i])
 				illegal_info.append(name)
 		return (illegal_course,illegal_info)
+		
 	def CheckSelected(self, course_code):
 		name = self.GetName(course_code)
 		try:
@@ -777,7 +778,6 @@ class Application(Application_ui):
 		if content.find(name) != -1:
 			return True
 		return False
-
 
 if __name__ == "__main__":
 	try:
