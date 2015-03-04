@@ -45,6 +45,7 @@ headers= {
 
 HEADERS = headers
 PROCESSING = False
+Cache = {}
 
 #--------------------------------------------------------------------------------------------
 def ReLoadData():
@@ -309,6 +310,7 @@ class Application(Application_ui):
 	#这个类实现具体的事件处理回调函数。界面生成代码在Application_ui中。
 	def __init__(self, master=None):
 		Application_ui.__init__(self, master)
+		
 		
 
 	def Login_Cmd(self, event=None):
@@ -596,6 +598,7 @@ class Application(Application_ui):
 				self.Log.update()
 				if PROCESSING==False:
 					return fail_course
+		self.CacheRefresh()
 		#---------------------------------------------
 		return fail_course
 
@@ -679,10 +682,33 @@ class Application(Application_ui):
 				if not PROCESSING:
 					return
 		return
-		
+	# =================
+	def CacheRefresh(self):
+		global Cache
+		#print Cache
+		for i in Cache.keys():
+			if Cache[i]["TTL"] < time.time():
+				del Cache[i]
+		#print Cache
+		return None
+	def CacheSet(self,key,value,TTL=3600):
+		global Cache
+		Cache[key] = {"value":value,"TTL":time.time()+TTL}
+		#print Cache
+		return None
+	def CacheGet(self,key):
+		global Cache
+		try:
+			return Cache[key]["value"]
+		except:
+			return None
+	# =================
 	def GetName(self,c_code):
 		if c_code == "":
 			return ""
+		value = self.CacheGet(c_code)
+		if value:
+			return value
 		h={
 			'Host': 'jwc.nankai.edu.cn',
 			'Connection': 'keep-alive',
@@ -705,10 +731,12 @@ class Application(Application_ui):
 			return "教务处网站错误"
 		pos=contnt.find('</TD></TR><TR><TD>')
 		if pos == -1:
-			return "wrong_course"
+			value =  "wrong_course"
 		else:
 			contnt=contnt[pos:]
-			return re.findall(u"[0-9\u4e00-\u9fa5\uFF00-\uFFEF\-]+",contnt)[1].encode('utf8')
+			value = re.findall(u"[0-9\u4e00-\u9fa5\uFF00-\uFFEF\-]+",contnt)[1].encode('utf8')
+		self.CacheSet(c_code,value,600)
+		return value
 		
 	def illegal_list(self, check_list):
 		illegal_course=[]
