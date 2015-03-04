@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
+from __future__ import division
 Ver = 'Ver 2.0 Basic (20140711 Beta 1)'
 
 import select
@@ -439,7 +440,10 @@ class Application(Application_ui):
 			#print post_course
 			#course=self.select_course(course,mode)[1]
 			#print course
-			fail_course=self.PostData(post_course,count)
+			try:
+				fail_course=self.PostData(post_course,count)
+			except KeyboardInterrupt:
+				self.Log.insert(1.0,"KeyboardInterrupt\n")
 			#print fail_course
 			course=self.merge_course_list(course,fail_course,mode)
 			#print course
@@ -507,6 +511,7 @@ class Application(Application_ui):
 	def PostData(self, post_course_list, count):
 		self.Log.delete(20.0,END)
 		self.Log2.delete(20.0,END)
+		NEXT_POST = time.time()+5
 		course=[]
 		for i in range(4):
 			course.append('')
@@ -582,13 +587,15 @@ class Application(Application_ui):
 		if PROCESSING==False:
 			return fail_course
 		self.Log.insert(1.0,'-----------------休眠5秒--------------------\n')
+		Wait = (NEXT_POST-time.time())/20
 		#-------------保持刷新防止假死------------
-		for j in range (0,20):
-			self.Log.update()
-			time.sleep(0.2492)
-			self.Log.update()
-			if PROCESSING==False:
-				return fail_course
+		if Wait>0:
+			for j in range (0,20):
+				self.Log.update()
+				time.sleep(Wait)
+				self.Log.update()
+				if PROCESSING==False:
+					return fail_course
 		#---------------------------------------------
 		return fail_course
 
@@ -655,8 +662,8 @@ class Application(Application_ui):
 			if ReLoadData():
 				self.Refresh_Cmd()
 			else:
-				PROCESSING=False
-				return False
+				#PROCESSING=False
+				return True
 		return False
 				
 	def wait_for_system(self):
@@ -689,13 +696,13 @@ class Application(Application_ui):
 			'Accept-Language': 'zh-CN,zh;q=0.8'
 		}
 		try:
-			conct=httplib.HTTPConnection('jwc.nankai.edu.cn',timeout=10)
+			conct=httplib.HTTPConnection('jwc.nankai.edu.cn',timeout=3)
 			formdata='strsearch='+c_code+'&radio=1&Submit=%CC%E1%BD%BB'
 			conct.request('POST','http://jwc.nankai.edu.cn/apps/xksc/search.asp',formdata,h)
 			contnt=conct.getresponse().read().decode("gb2312")
 			conct.close()
 		except:
-			return "无法获取课程名称"
+			return "教务处网站错误"
 		pos=contnt.find('</TD></TR><TR><TD>')
 		if pos == -1:
 			return "wrong_course"
@@ -708,7 +715,7 @@ class Application(Application_ui):
 		illegal_info=[]
 		for i in range(len(check_list)):
 			name=self.GetName(check_list[i])
-			if (name=="无法获取课程名称") or (name=="wrong_course"):
+			if (name=="wrong_course"):
 				illegal_course.append(check_list[i])
 				illegal_info.append(name)
 		return (illegal_course,illegal_info)
