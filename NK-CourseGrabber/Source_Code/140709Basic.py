@@ -685,16 +685,16 @@ class Application(Application_ui):
 	# =================
 	def CacheRefresh(self):
 		global Cache
-		print Cache
+		#print Cache
 		for i in Cache.keys():
 			if Cache[i]["TTL"] < time.time():
 				del Cache[i]
-		print Cache
+		#print Cache
 		return None
 	def CacheSet(self,key,value,TTL=3600):
 		global Cache
 		Cache[key] = {"value":value,"TTL":time.time()+TTL}
-		print Cache
+		#print Cache
 		return None
 	def CacheGet(self,key):
 		global Cache
