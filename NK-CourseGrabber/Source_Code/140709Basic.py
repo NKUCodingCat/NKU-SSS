@@ -658,12 +658,12 @@ class Application(Application_ui):
 			else:
 				return True
 		except:
-			self.Log.insert(1.0,"网络连接错误，无法连接到教务处系统。请检查网络连接！\n")
+			self.Log.insert(1.0,"网络连接错误，无法连接到选课系统。请检查网络连接！\n")
 			if ReLoadData():
 				self.Refresh_Cmd()
 			else:
-				#PROCESSING=False
-				return True
+				PROCESSING=False
+				return False
 		return False
 				
 	def wait_for_system(self):
