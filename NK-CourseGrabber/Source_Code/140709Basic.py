@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 from __future__ import division
-Ver = 'Ver 2.0 Basic (20140711 Beta 1)'
+Ver = 'Ver 2.0 Basic (20150305)'
 
 import select
 import httplib
@@ -153,7 +153,7 @@ class Application_ui(Frame):
 		self.style.configure('TLogin.TButton')
 		self.Login = Button(self.top, text='登录', command=self.Login_Cmd, style='TLogin.TButton')
 		self.Login.place(relx=0.07, rely=0.39, relwidth=0.129, relheight=0.09)
-		
+
 		self.style.configure('TRe.TButton')
 		self.Re = Button(self.top, text='刷新验证码', command=self.Refresh_Cmd)
 		self.Re.place(relx=0.22, rely=0.39, relwidth=0.15, relheight=0.09)
@@ -263,7 +263,7 @@ class Application_ui(Frame):
 		self.Option2 = Radiobutton(self.top, text='轮询模式', value=1, variable=self.Var, style='TOption2.TRadiobutton')
 		self.Option2.place(relx=0.488, rely=0.424, relwidth=0.127, relheight=0.036)
 		self.Var.set(1)
-		
+
 		self.style.configure('TStart.TButton')
 		self.Start = Button(self.top, text='开始抢课', command=self.Start_Cmd, style='TStart.TButton')
 		self.Start.place(relx=0.638, rely=0.424, relwidth=0.139, relheight=0.087)
@@ -291,16 +291,16 @@ class Application_ui(Frame):
 		self.style.configure('TVersion.TLabel', anchor='w')
 		self.Version = Label(self.top, text=Ver, style='TVersion.TLabel')
 		self.Version.place(relx=0.638, rely=0.932, relwidth=0.35, relheight=0.053)
-		
+
 		Network=True
 		if not ReLoadData():
 			Network=False
-		
+
 		self.photo=PIL.Image.open("ValidateCode.jpg")
 		self.im = PIL.ImageTk.PhotoImage(self.photo)
 		self.V_Pic= Label(self.top,image = self.im)
 		self.V_Pic.place(relx=0.05, rely=0.203, relwidth=0.327, relheight=0.053)
-		
+
 		if not Network:
 			self.Log.insert(1.0,"网络连接错误，无法连接到选课系统。请检查网络连接！\n")
 			self.Log.update()
@@ -310,8 +310,8 @@ class Application(Application_ui):
 	#这个类实现具体的事件处理回调函数。界面生成代码在Application_ui中。
 	def __init__(self, master=None):
 		Application_ui.__init__(self, master)
-		
-		
+
+
 
 	def Login_Cmd(self, event=None):
 		global HEADERS
@@ -336,39 +336,39 @@ class Application(Application_ui):
 				self.Refresh()
 			else:
 				return
-		
+
 		global Login_S
 		Login_S = False
 		self.err_code="未知错误"
-		
+
 		if content.find("stdtop") != -1:
 			Login_S = True
 			header = self.headers
 			STUDENT_ID=ID
 			PASSWORD=passwd
 			self.Log.insert(1.0,"登录成功！\n")
-		
-		get_v_code=True		
+
+		get_v_code=True
 		if Login_S == False and (content.find(unicode("请输入正确的验证码","utf8")) != -1):
 			self.err_code="验证码错误！"
 			if not self.Refresh_Cmd():
 				get_v_code=False
 			else:
 				get_v_code=True
-			
+
 		if Login_S == False and (content.find(u"用户不存在或密码错误") != -1):
 			self.err_code="用户不存在或密码错误！"
-			
+
 		if Login_S == False and (content.find(u"忙") != -1 or content.find(u"负载") != -1):
 			self.err_code="系统忙，请稍后再试！"
-		
-		
+
+
 		if (Login_S != True):
 			self.Log.insert(1.0,self.err_code+'\n')
 			if not get_v_code:
 				self.Log.insert(1.0,'验证码刷新失败！\n')
 		return
-		
+
 	def Start_Cmd(self, event=None):
 		#------------------------------------------------------------------
 		global PROCESSING
@@ -419,7 +419,7 @@ class Application(Application_ui):
 					StopSignal=False
 				return
 		#------------------------------------------------------------------
-		
+
 		#------------------------------------------------------------------
 		self.Log.delete(0.0,END)
 		self.Log.insert(1.0,"Starting........Connecting............\n")
@@ -469,7 +469,7 @@ class Application(Application_ui):
 		self.Log.update()
 		StopSignal=True
 		return
-		
+
 	def Refresh_Cmd(self, event=None):
 		self.vcode.delete(0,END)
 		try:
@@ -488,7 +488,7 @@ class Application(Application_ui):
 		self.V_Pic= Label(self.top,image = self.im)
 		self.V_Pic.place(relx=0.05, rely=0.203, relwidth=0.327, relheight=0.053)
 		return True
-		
+
 	def select_course(self, course_list, mode):
 		selected_list=[]
 		if mode=='queue':
@@ -499,7 +499,7 @@ class Application(Application_ui):
 			for i in range(min(4,len(course_list))):
 				selected_list.append(course_list.pop())
 			return (selected_list,course_list)
-		
+
 	def merge_course_list(self, course_list, selected_list, mode):
 		if mode=='queue':
 			for i in range(len(selected_list)):
@@ -509,7 +509,7 @@ class Application(Application_ui):
 			for i in range(len(selected_list)):
 				course_list.append(selected_list.pop())
 			return course_list
-		
+
 	def PostData(self, post_course_list, count):
 		self.Log.delete(20.0,END)
 		self.Log2.delete(20.0,END)
@@ -524,7 +524,7 @@ class Application(Application_ui):
 			info += (course[i]+' '+self.GetName(course[i])+'\n')
 		self.Log.insert(1.0,info)
 		self.Log.update()
-		
+
 		postdata="operation=xuanke&index="
 		for i in range(4):
 			if i<len(course):
@@ -551,7 +551,7 @@ class Application(Application_ui):
 			return post_course_list
 		#----------------------------------------------------------
 		#----------------------抓取-------------
-		reg = re.compile(u'"BlueBigText">[\s\S]*</font>') 
+		reg = re.compile(u'"BlueBigText">[\s\S]*</font>')
 		Data = reg.findall(content)
 		#---------------截取--------------------\
 		if Data != []:
@@ -602,7 +602,7 @@ class Application(Application_ui):
 		#---------------------------------------------
 		return fail_course
 
-		
+
 	def GetCourseCode(self):
 		course_code=[]
 		tmp_code=self.Text12.get()
@@ -642,11 +642,11 @@ class Application(Application_ui):
 		if tmp_code!='':
 			course_code.append(tmp_code)
 		return course_code
-		
+
 	def CheckLogin(self):
 		global	Login_S
 		return Login_S
-		
+
 	def CheckSystemStatus(self):
 		global PROCESSING
 		XuanKeButton = re.compile(u'''<input type="button" name="xuanke"''')
@@ -668,7 +668,7 @@ class Application(Application_ui):
 				PROCESSING=False
 				return False
 		return False
-				
+
 	def wait_for_system(self):
 		global PROCESSING
 		while not self.CheckSystemStatus():
@@ -737,7 +737,7 @@ class Application(Application_ui):
 			value = re.findall(u"[0-9\u4e00-\u9fa5\uFF00-\uFFEF\-]+",contnt)[1].encode('utf8')
 		self.CacheSet(c_code,value,600)
 		return value
-		
+
 	def illegal_list(self, check_list):
 		illegal_course=[]
 		illegal_info=[]
@@ -773,4 +773,3 @@ if __name__ == "__main__":
 		ff.close()
 	top = Tk()
 	Application(top).mainloop()
-

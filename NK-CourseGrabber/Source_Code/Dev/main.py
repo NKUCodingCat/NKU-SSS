@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
-Ver = 'Ver 2.1.1 Dev (20150302)'
+from __future__ import division
+Ver = 'Ver 2.1.2 Dev (20150305)'
 
 import select
 import httplib
@@ -13,6 +14,7 @@ import cookielib
 import time
 
 import myOCR
+import timeout
 
 #----------------------------------------------------
 addr="http://222.30.32.10/ValidateCode"
@@ -45,6 +47,7 @@ headers= {
 
 HEADERS = headers
 PROCESSING = False
+Cache = {}
 
 #--------------------------------------------------------------------------------------------
 def ReLoadData():
@@ -114,7 +117,7 @@ class Application_ui(Frame):
 	#这个类仅实现界面生成功能，具体事件处理代码在子类Application中。
 	def __init__(self, master=None):
 		Frame.__init__(self, master)
-		self.master.title('一键刷课 for NKU V2.1.1 Dev')
+		self.master.title('一键刷课 for NKU V2.1.2 Dev')
 		self.master.geometry('640x480')
 		self.createWidgets()
 
@@ -152,7 +155,7 @@ class Application_ui(Frame):
 		self.style.configure('TLogin.TButton')
 		self.Login = Button(self.top, text='登录', command=self.Login_Cmd, style='TLogin.TButton')
 		self.Login.place(relx=0.07, rely=0.39, relwidth=0.129, relheight=0.09)
-		
+
 		self.style.configure('TRe.TButton')
 		self.Re = Button(self.top, text='刷新验证码', command=self.Refresh_Cmd)
 		self.Re.place(relx=0.22, rely=0.39, relwidth=0.15, relheight=0.09)
@@ -289,16 +292,16 @@ class Application_ui(Frame):
 		self.style.configure('TVersion.TLabel', anchor='w')
 		self.Version = Label(self.top, text=Ver, style='TVersion.TLabel')
 		self.Version.place(relx=0.638, rely=0.932, relwidth=0.35, relheight=0.053)
-		
+
 		Network=True
 		if not ReLoadData():
 			Network=False
-		
+
 		self.photo=PIL.Image.open("ValidateCode.jpg")
 		self.im = PIL.ImageTk.PhotoImage(self.photo)
 		self.V_Pic= Label(self.top,image = self.im)
 		self.V_Pic.place(relx=0.05, rely=0.203, relwidth=0.327, relheight=0.053)
-		
+
 		if not Network:
 			self.Log.insert(1.0,"网络连接错误，无法连接到选课系统。请检查网络连接！\n")
 			self.Log.update()
@@ -308,18 +311,21 @@ class Application(Application_ui):
 	#这个类实现具体的事件处理回调函数。界面生成代码在Application_ui中。
 	def __init__(self, master=None):
 		Application_ui.__init__(self, master)
-		
+
 
 	def Login_Cmd(self, event=None):
 		global HEADERS
 		global STUDENT_ID
 		global PASSWORD
 		self.headers = HEADERS
-		ID=self.ID.get()
-		passwd=self.PassWord.get()
-		v_code=self.vcode.get()
-		if v_code=="":
-			v_code=myOCR.myOCR_start(self.photo)
+		ID = self.ID.get()
+		passwd = self.PassWord.get()
+		v_code = self.vcode.get()
+		if v_code == "":
+			try:
+				v_code = myOCR.myOCR_start(self.photo)
+			except :
+				v_code = ''
 			self.vcode.insert(0,v_code)
 		try:
 			logindata="operation=&usercode_text="+ID+"&userpwd_text="+passwd+"&checkcode_text="+v_code+"&submittype=%C8%B7+%C8%CF"
@@ -335,33 +341,33 @@ class Application(Application_ui):
 				self.Refresh()
 			else:
 				return
-		
+
 		global Login_S
 		Login_S = False
 		self.err_code="未知错误"
-		
+
 		if content.find("stdtop") != -1:
 			Login_S = True
 			header = self.headers
 			STUDENT_ID=ID
 			PASSWORD=passwd
 			self.Log.insert(1.0,"登录成功！\n")
-		
-		get_v_code=True		
+
+		get_v_code=True
 		if Login_S == False and (content.find(unicode("请输入正确的验证码","utf8")) != -1):
 			self.err_code="验证码错误！"
 			if not self.Refresh_Cmd():
 				get_v_code=False
 			else:
 				get_v_code=True
-			
+
 		if Login_S == False and (content.find(u"用户不存在或密码错误") != -1):
 			self.err_code="用户不存在或密码错误！"
-			
+
 		if Login_S == False and (content.find(u"忙") != -1 or content.find(u"负载") != -1):
 			self.err_code="系统忙，请稍后再试！"
-		
-		
+
+
 		if (Login_S != True):
 			self.Log.insert(1.0,self.err_code+'\n')
 			if not get_v_code:
@@ -464,7 +470,7 @@ class Application(Application_ui):
 					StopSignal=False
 				return
 		#------------------------------------------------------------------
-		
+
 		#------------------------------------------------------------------
 		self.Log.delete(0.0,END)
 		self.Log.insert(1.0,"Starting........Connecting............\n")
@@ -487,7 +493,10 @@ class Application(Application_ui):
 			#print post_course
 			#course=self.select_course(course,mode)[1]
 			#print course
-			fail_course=self.PostData(post_course,count)
+			try:
+				fail_course=self.PostData(post_course,count)
+			except KeyboardInterrupt:
+				self.Log.insert(1.0,"KeyboardInterrupt\n")
 			#print fail_course
 			course=self.merge_course_list(course,fail_course,mode)
 			#print course
@@ -511,7 +520,7 @@ class Application(Application_ui):
 		self.Log.update()
 		StopSignal=True
 		return
-		
+
 	def Refresh_Cmd(self, event=None):
 		self.vcode.delete(0,END)
 		try:
@@ -530,7 +539,7 @@ class Application(Application_ui):
 		self.V_Pic= Label(self.top,image = self.im)
 		self.V_Pic.place(relx=0.05, rely=0.203, relwidth=0.327, relheight=0.053)
 		return True
-		
+
 	def select_course(self, course_list, mode):
 		selected_list=[]
 		if mode=='queue':
@@ -541,7 +550,7 @@ class Application(Application_ui):
 			for i in range(min(4,len(course_list))):
 				selected_list.append(course_list.pop())
 			return (selected_list,course_list)
-		
+
 	def merge_course_list(self, course_list, selected_list, mode):
 		if mode=='queue':
 			for i in range(len(selected_list)):
@@ -551,11 +560,12 @@ class Application(Application_ui):
 			for i in range(len(selected_list)):
 				course_list.append(selected_list.pop())
 			return course_list
-		
+
 	def PostData(self, post_course_list, count):
 		global PROCESSING
 		self.Log.delete(20.0,END)
 		self.Log2.delete(20.0,END)
+		NEXT_POST = time.time()+3
 		course=[]
 		for i in range(4):
 			course.append('')
@@ -566,7 +576,7 @@ class Application(Application_ui):
 			info += (course[i]+' '+self.GetName(course[i])+'\n')
 		self.Log.insert(1.0,info)
 		self.Log.update()
-		
+
 		postdata="operation=xuanke&index="
 		for i in range(4):
 			if i<len(course):
@@ -596,7 +606,7 @@ class Application(Application_ui):
 		content=response.decode("gbk").encode('utf-8')
 		#----------------------------------------------------------
 		#----------------------抓取-------------
-		reg = re.compile(u'"BlueBigText">[\s\S]*</font>') 
+		reg = re.compile(u'"BlueBigText">[\s\S]*</font>')
 		Data = reg.findall(content)
 		#---------------截取--------------------\
 		if Data != []:
@@ -635,17 +645,20 @@ class Application(Application_ui):
 		if PROCESSING==False:
 			return fail_course
 		self.Log.insert(1.0,'-----------------休眠3秒--------------------\n')
+		Wait = (NEXT_POST-time.time())/20
 		#-------------保持刷新防止假死------------
-		for j in range (0,12):
-			self.Log.update()
-			time.sleep(0.2492)
-			self.Log.update()
-			if PROCESSING==False:
-				return fail_course
+		if Wait>0:
+			for j in range (0,20):
+				self.Log.update()
+				time.sleep(Wait)
+				self.Log.update()
+				if PROCESSING==False:
+					return fail_course
+		self.CacheRefresh()
 		#---------------------------------------------
 		return fail_course
 
-		
+
 	def GetCourseCode(self):
 		course_code=[]
 		tmp_code=self.Text12.get()
@@ -685,11 +698,11 @@ class Application(Application_ui):
 		if tmp_code!='':
 			course_code.append(tmp_code)
 		return course_code
-		
+
 	def CheckLogin(self):
 		global	Login_S
 		return Login_S
-		
+
 	def CheckSystemStatus(self):
 		global PROCESSING
 		XuanKeButton = re.compile(u'''<input type="button" name="xuanke"''')
@@ -704,14 +717,14 @@ class Application(Application_ui):
 			else:
 				return True
 		except:
-			self.Log.insert(1.0,"网络连接错误，无法连接到教务处系统。请检查网络连接！\n")
+			self.Log.insert(1.0,"网络连接错误，无法连接到选课系统。请检查网络连接！\n")
 			if ReLoadData():
 				self.Refresh_Cmd()
 			else:
 				PROCESSING=False
 				return False
 		return False
-				
+
 	def wait_for_system(self):
 		global PROCESSING
 		while not self.CheckSystemStatus():
@@ -725,10 +738,34 @@ class Application(Application_ui):
 				if not PROCESSING:
 					return
 		return
-		
+
+	def CacheRefresh(self):
+		global Cache
+		#print Cache
+		for i in Cache.keys():
+			if Cache[i]["TTL"] < time.time():
+				del Cache[i]
+		#print Cache
+		return None
+	def CacheSet(self,key,value,TTL=3600):
+		global Cache
+		Cache[key] = {"value":value,"TTL":time.time()+TTL}
+		#print Cache
+		return None
+	def CacheGet(self,key):
+		global Cache
+		try:
+			return Cache[key]["value"]
+		except:
+			return None
+
+
 	def GetName(self,c_code):
 		if c_code == "":
 			return ""
+		value = self.CacheGet(c_code)
+		if value:
+			return value
 		h={
 			'Host': 'jwc.nankai.edu.cn',
 			'Connection': 'keep-alive',
@@ -742,20 +779,22 @@ class Application(Application_ui):
 			'Accept-Language': 'zh-CN,zh;q=0.8'
 		}
 		try:
-			conct=httplib.HTTPConnection('jwc.nankai.edu.cn',timeout=10)
+			conct=httplib.HTTPConnection('jwc.nankai.edu.cn',timeout=3)
 			formdata='strsearch='+c_code+'&radio=1&Submit=%CC%E1%BD%BB'
 			conct.request('POST','http://jwc.nankai.edu.cn/apps/xksc/search.asp',formdata,h)
 			contnt=conct.getresponse().read().decode("gb2312")
 			conct.close()
 		except:
-			return "无法获取课程名称"
+			return "教务处网站错误"
 		pos=contnt.find('</TD></TR><TR><TD>')
 		if pos == -1:
-			return "wrong_course"
+			value =  "wrong_course"
 		else:
 			contnt=contnt[pos:]
-			return re.findall(u"[0-9\u4e00-\u9fa5\uFF00-\uFFEF\-]+",contnt)[1].encode('utf8')
-		
+			value = re.findall(u"[0-9\u4e00-\u9fa5\uFF00-\uFFEF\-]+",contnt)[1].encode('utf8')
+			self.CacheSet(c_code,value,600)
+		return value
+
 	def illegal_list(self, check_list):
 		illegal_course=[]
 		illegal_info=[]
@@ -765,7 +804,7 @@ class Application(Application_ui):
 				illegal_course.append(check_list[i])
 				illegal_info.append(name)
 		return (illegal_course,illegal_info)
-		
+
 	def CheckSelected(self, course_code):
 		name = self.GetName(course_code)
 		try:
@@ -792,4 +831,3 @@ if __name__ == "__main__":
 	top = Tk()
 	#top.iconbitmap('NKU.ico')
 	Application(top).mainloop()
-
