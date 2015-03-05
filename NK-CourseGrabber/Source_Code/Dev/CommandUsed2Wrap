@@ -1,0 +1,6 @@
+#! /usr/bin/env
+yes|py2applet --make-setup main.py vcodeData vcodeData2 NKU.icns ValidateCode.jpg ValidateCode2
+python setup.py py2app
+rm -r ./NK_CourseGrabber150305.app
+mv dist/main.app ./NK_CourseGrabber150305.app
+rm -r dist/ build/
