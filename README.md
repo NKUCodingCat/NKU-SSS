@@ -1,26 +1,24 @@
-﻿NKU-SSS
+NKU-SSS
 =======
 南开生存之软件套装
 
-NKU Survival Software Suite (也许是suite？不要在意具体怎么拼啦~) (没错就是suite=。=)
+NKU Survival Software Suite (也许是suite？不要在意具体怎么拼啦~) (没错就是suite=。=)(所以是suit还是suite啊喂(╯‵□′)╯︵┻━┻)
 
 我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) / [镜像1(US)](http://vps1.nkucodingcat.com/test/cdn/) /  [镜像2(US)-ipv4](http://clatter.cn/proj/nkucdn/)  [镜像2(US)-ipv6](http://ipv6.clatter.cn/proj/nkucdn/)和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
 开发/维护 进度
 =========
-2015.3.5   加入课号cache，减轻教务处服务器压力
-
-2015.1.14 加速镜像（专治各种下不下来）上线
-
-2015.1.3   正在修理bug
-
-2014.9.16 更新由于教务处更换服务器导致的课号查询失效
+- 2015.5.4   又是一年龚能时，小伙伴们你们准备好了吗（据说改成一页六道题了惹）
+- 2015.3.5   加入课号cache，减轻教务处服务器压力
+- 2015.1.14  加速镜像（专治各种下不下来）上线
+- 2015.1.3   正在修理bug
+- 2014.9.16  更新由于教务处更换服务器导致的课号查询失效
 
 文件说明
 =======
 NK-CourseGrabber：一键刷课
 
-GongNeng：功能测评套装
+GongNeng：龚能测评套装
 
 How to use
 ========
@@ -37,6 +35,7 @@ How to use
 希望每一个有能力的人都加入到我们的队伍中来，共同为南开创造一个开放的软件创作氛围。
 
 【上面这句话…………大概就是……谁要是能维护就fork一个吧这样子大家就能愉快地用下去不怕学校更新网站（marked by CodingCat）】
+
 【嗯。。大概就是这个意思。嗯=，=】
 
 To be continued…。~
