@@ -89,8 +89,13 @@ if __name__ == "__main__":
 
 """)
 	S = requests.session()
-	usr = raw_input("请输入学号：".decode("utf-8").encode("GBK"))
-	pwd = raw_input("请输入密码：".decode("utf-8").encode("GBK"))
+	while 1:
+		usr = raw_input("Input your id plz  : ")
+		if len(usr) != 7:
+			print 'wrong length of id,input again'
+		else:
+			break
+	pwd = raw_input("Input Your PassWord : ")
 	try:
 		S = login(S, usr, pwd)
 	except:

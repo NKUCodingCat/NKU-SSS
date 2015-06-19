@@ -41,8 +41,9 @@ req3 = urllib2.Request(urllogin,headers=valueslogin)
 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 response = opener.open(req3,postdata)
 print 'Account Checking.........'
-if response.read() != '<meta http-equiv=refresh content=\'0; url=http://fuxue.nankai.edu.cn/index.php/index/index\' >':
+if not re.findall(re.escape("url=http://fuxue.nankai.edu.cn/index.php/index/index\' >"), response.read()):
 	print 'Password Error'
+	raw_input("Press Enter to continue")
 	sys.exit(0)
 for cookie in cj:
 	cookie = cookie.value
@@ -112,3 +113,5 @@ for i in range(IDS,IDE+1):
 	print count
 	
 	count=count + 1
+	
+raw_input("\nMission Complete\nPress Enter to continue")
