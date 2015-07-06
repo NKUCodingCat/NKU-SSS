@@ -2,35 +2,35 @@
 import httplib
 import re
 import os
-from wxPython.wx import *
+from wx import *
 
-class MyFrame(wxFrame):
-    def __init__(self, parent, ID, title, pos=wxDefaultPosition,
-                 size=(280, 380), style=wxDEFAULT_FRAME_STYLE):
-        wxFrame.__init__(self, parent, ID, title, pos, size, style)
-        self.panel = wxPanel(self, -1)
+class MyFrame(Frame):
+    def __init__(self, parent, ID, title, pos=DefaultPosition,
+                 size=(280, 380), style=DEFAULT_FRAME_STYLE):
+        Frame.__init__(self, parent, ID, title, pos, size, style)
+        self.panel = Panel(self, -1)
         
-        label_id=wxStaticText(self.panel,1008,"Student ID:")
-        label_id.SetPosition(wxPoint(15, 15))
-        label_psw=wxStaticText(self.panel,1009,"Password:")
-        label_psw.SetPosition(wxPoint(15, 65))
-        label_val=wxStaticText(self.panel,1010,"Validate Code:")
-        label_val.SetPosition(wxPoint(15, 165))
+        label_id=StaticText(self.panel,1008,"Student ID:")
+        label_id.SetPosition(Point(15, 15))
+        label_psw=StaticText(self.panel,1009,"Password:")
+        label_psw.SetPosition(Point(15, 65))
+        label_val=StaticText(self.panel,1010,"Validate Code:")
+        label_val.SetPosition(Point(15, 165))
         
-        self.text_id=wxTextCtrl(self.panel,1005)
-        self.text_id.SetPosition(wxPoint(120, 15))
-        self.text_psw=wxTextCtrl(self.panel,1006)
-        self.text_psw.SetPosition(wxPoint(120, 65))
-        self.text_val=wxTextCtrl(self.panel,1007)
-        self.text_val.SetPosition(wxPoint(120, 165))
+        self.text_id=TextCtrl(self.panel,1005)
+        self.text_id.SetPosition(Point(120, 15))
+        self.text_psw=TextCtrl(self.panel,1006)
+        self.text_psw.SetPosition(Point(120, 65))
+        self.text_val=TextCtrl(self.panel,1007)
+        self.text_val.SetPosition(Point(120, 165))
         
-        button = wxButton(self.panel, 1003, u"退出")
-        button.SetPosition(wxPoint(120, 215))
+        button = Button(self.panel, 1003, u"退出")
+        button.SetPosition(Point(120, 215))
         EVT_BUTTON(self, 1003, self.OnCloseMe)
         EVT_CLOSE(self, self.OnCloseWindow)
 
-        self.button = wxButton(self.panel, 1004, u"评教")
-        self.button.SetPosition(wxPoint(30, 215))
+        self.button = Button(self.panel, 1004, u"评教")
+        self.button.SetPosition(Point(30, 215))
         EVT_BUTTON(self, 1004, self.OnPressMe)
 
         #get cookie
@@ -49,12 +49,12 @@ class MyFrame(wxFrame):
         f.close()
         conn.close()
 
-        image=wxImage("ValidateCode.jpg",wxBITMAP_TYPE_JPEG)
-        val=wxStaticBitmap(self.panel,bitmap=image.ConvertToBitmap())
-        val.SetPosition(wxPoint(15, 115))
+        image=Image("ValidateCode.jpg",BITMAP_TYPE_JPEG)
+        val=StaticBitmap(self.panel,bitmap=image.ConvertToBitmap())
+        val.SetPosition(Point(15, 115))
 
-        self.label_status=wxStaticText(self.panel,1099,"Modified By NKUCodingCat\nto compatible ubuntu")
-        self.label_status.SetPosition(wxPoint(20, 340))
+        self.label_status=StaticText(self.panel,1099,"Modified By NKUCodingCat\nto compatible ubuntu")
+        self.label_status.SetPosition(Point(20, 340))
 
     def OnCloseMe(self, event):
         self.Close(True)
@@ -101,19 +101,19 @@ class MyFrame(wxFrame):
             conn.close()
         #提示成功
         s=u"完成!\n总共: %d\n成功: %d" % (num,num-failcount)
-        self.label_status=wxStaticText(self.panel,1008,s)
-        self.label_status.SetPosition(wxPoint(50, 265))    
+        self.label_status=StaticText(self.panel,1008,s)
+        self.label_status.SetPosition(Point(50, 265))    
         os.remove("ValidateCode.jpg")
         
     def OnCloseWindow(self, event):
         self.Destroy()
 
-class MyApp(wxApp):
+class MyApp(App):
     def OnInit(self):
-        frame = MyFrame(NULL, -1, u"一键评教 by Jeff")
-        frame.Show(true)
+        frame = MyFrame(None, -1, u"一键评教 by Jeff")
+        frame.Show(True)
         self.SetTopWindow(frame)
-        return true
+        return True
 
 app = MyApp(0)
 app.MainLoop()
