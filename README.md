@@ -6,6 +6,8 @@ NKU Survival Software Suite (也许是suite？不要在意具体怎么拼啦~) (
 
 我知道你们最需要的是[下载链接](https://github.com/NKUCodingCat/NKU-SSS/archive/master.zip) / [镜像1(US)](http://vps1.nkucodingcat.com/test/cdn/) /  [镜像2(US)-ipv4](http://clatter.cn/proj/nkucdn/)  [镜像2(US)-ipv6](http://ipv6.clatter.cn/proj/nkucdn/)和[使用指南](https://github.com/NKUCodingCat/NKU-SSS/wiki)
 
+该项目已经停止开发，新的项目地址位于[NKU-SSS-in-One](https://github.com/NKUCodingCat/NKU-SSS-in-One)
+
 开发/维护 进度
 =========
 - 2015.5.22  2015版自评/互评已出，将与测评同时发布敬请期待
